@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { Alert, Box, Button, IconButton, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-// import axios from "axios";
+import axios from "axios";
 
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 const Form = styled("form")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "baseline",
   margin: "10px auto",
   padding: theme.spacing(5),
-  border: "1px solid #e3e3e3",
   borderRadius: theme.shape.borderRadius,
 }));
 
@@ -26,21 +26,35 @@ const CustomInput = styled("input")(({ theme }) => ({
 export default function Login() {
   const [isHide, setHide] = useState(true);
   const [userInfo, setUserInfo] = useState({});
-
+  const [errorMessage, setErrorMessage] = useState(false);
+  const navigate = useNavigate();
   //handleChange
   const change = (e) => {
     const { name, value } = e.target;
     setUserInfo((prev) => ({ ...prev, [name]: value }));
-    console.log(userInfo);
   };
 
   //login and send credentials
-  // const Signin = (e) => {
-  //   axios.post("", {}).then((res) => console.log(res.data));
-  // };
+  const signin = (e) => {
+    e.preventDefault();
+    axios
+      .post("https://simulation-credit.herokuapp.com/api/token/", userInfo)
+      .then((res) => {
+        localStorage.setItem("access-token", res.data.access);
+        localStorage.setItem("refresh-token", res.data.refresh);
+        navigate("/");
+      })
+      .catch((err) => setErrorMessage(true));
+  };
 
   return (
-    <Box sx={{ width: { xs: "100%", md: "70%" }, margin: "40px auto" }}>
+    <Box
+      sx={{
+        width: { xs: "100%", md: "70%" },
+
+        margin: "40px auto",
+      }}
+    >
       <Typography
         variant="h4"
         fontWeight={400}
@@ -51,31 +65,47 @@ export default function Login() {
         Login To Admin Dashboard
       </Typography>
       <Form
+        onSubmit={signin}
         sx={{
           width: { xs: "94%", sm: "460px", md: "500px" },
           position: "relative",
+          backgroundColor: "white",
         }}
       >
         <Typography variant="h4" sx={{ marginBottom: "25px" }}>
           Sign in
         </Typography>
+        {errorMessage ? (
+          <Alert severity="error" sx={{ width: "100%" }}>
+            donnees invalid
+          </Alert>
+        ) : null}
         <label htmlFor="username">username</label>
         <CustomInput type="text" name="username" required onChange={change} />
         <label htmlFor="password">password</label>
-
-        <CustomInput
-          type={isHide ? "password" : "text"}
-          name="password"
-          required
-          onChange={change}
-        />
-        <IconButton
-          onClick={(e) => setHide(!isHide)}
-          sx={{ position: "absolute", top: "60%", right: "10%" }}
+        <Box
+          className="inputgroupe"
+          sx={{ position: "relative", width: "100%" }}
         >
-          {isHide ? <FiEye /> : <FiEyeOff />}
-        </IconButton>
-        <Button sx={{ margin: "10px 0" }} variant="contained" disableElevation>
+          <CustomInput
+            type={isHide ? "password" : "text"}
+            name="password"
+            required
+            onChange={change}
+          />
+          <IconButton
+            onClick={(e) => setHide(!isHide)}
+            sx={{ position: "absolute", top: "10%", right: "0%" }}
+          >
+            {isHide ? <FiEye /> : <FiEyeOff />}
+          </IconButton>
+        </Box>
+        <Button
+          sx={{ margin: "10px 0" }}
+          type="submit"
+          variant="contained"
+          disableElevation
+        >
           Sign in
         </Button>
       </Form>

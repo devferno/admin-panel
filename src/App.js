@@ -3,8 +3,9 @@ import { CssBaseline } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import { Navigate, Outlet } from "react-router-dom";
-
-import { useState } from "react";
+import Simulation from "./components/Simulations";
+import Users from "./components/Users";
+import Acceuil from "./components/Acceuil";
 
 export function Private() {
   return (
@@ -15,11 +16,12 @@ export function Private() {
 }
 
 export default function App() {
-  //change it with the access token
-  const [isLogin, setLogin] = useState(false);
+  //set background to gray
+  document.body.style.background = "#e3e3e3";
 
   //protected Routes
   const ProtectedRoute = () => {
+    const isLogin = localStorage.getItem("access-token");
     return isLogin ? (
       <Layout>
         <Outlet />
@@ -35,7 +37,9 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<Private />} />
+          <Route path="/simulations" element={<Simulation />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/" element={<Acceuil />} />
         </Route>
       </Routes>
     </>

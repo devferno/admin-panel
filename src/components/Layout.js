@@ -12,6 +12,7 @@ import {
   ListItemIcon,
   ListItemText,
   ListItem,
+  Button,
 } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import {
@@ -75,6 +76,12 @@ export default function Layout({ children }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
 
+  const deconnecter = () => {
+    localStorage.removeItem("access-token");
+    localStorage.removeItem("refresh-token");
+    window.location = "/login";
+  };
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -86,7 +93,12 @@ export default function Layout({ children }) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" elevation={0} open={open}>
+      <AppBar
+        position="fixed"
+        elevation={0}
+        open={open}
+        sx={{ background: "white", color: "black" }}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
@@ -97,9 +109,18 @@ export default function Layout({ children }) {
           >
             <FiMenu />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Persistent drawer
+          <Typography sx={{ flexGrow: 1 }} variant="h6" noWrap component="div">
+            Bank
           </Typography>
+          <Button
+            variant="outlined"
+            color="error"
+            size="small"
+            onClick={deconnecter}
+            disableElevation
+          >
+            Deconnecter
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer
