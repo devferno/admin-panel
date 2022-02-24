@@ -6,18 +6,13 @@ import { Navigate, Outlet } from "react-router-dom";
 import Simulation from "./components/Simulations";
 import Users from "./components/Users";
 import Acceuil from "./components/Acceuil";
+import axios from "axios";
 
-export function Private() {
-  return (
-    <div>
-      <h1>Private</h1>
-    </div>
-  );
-}
+axios.defaults.baseURL = "https://simulation-credit.herokuapp.com/api/";
 
 export default function App() {
   //set background to gray
-  document.body.style.background = "#e3e3e3";
+  // document.body.style.background = "#e3e3e3";
 
   //protected Routes
   const ProtectedRoute = () => {

@@ -34,11 +34,13 @@ export default function Login() {
     setUserInfo((prev) => ({ ...prev, [name]: value }));
   };
 
+  //set bgColor to gray
+  document.body.style.background = "#e2e2e2";
   //login and send credentials
   const signin = (e) => {
     e.preventDefault();
     axios
-      .post("https://simulation-credit.herokuapp.com/api/token/", userInfo)
+      .post("/token/", userInfo)
       .then((res) => {
         localStorage.setItem("access-token", res.data.access);
         localStorage.setItem("refresh-token", res.data.refresh);

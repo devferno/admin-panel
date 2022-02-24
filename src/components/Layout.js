@@ -20,7 +20,6 @@ import {
   FiHome,
   FiSliders,
   FiMenu,
-  FiChevronRight,
   FiChevronsLeft,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -74,7 +73,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function Layout({ children }) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   const deconnecter = () => {
     localStorage.removeItem("access-token");
@@ -139,7 +138,7 @@ export default function Layout({ children }) {
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
-              <FiChevronRight />
+              <FiChevronsLeft />
             ) : (
               <FiChevronsLeft />
             )}
@@ -149,6 +148,7 @@ export default function Layout({ children }) {
         <List>
           {["Utilisateurs", "Accueil", "Simulations"].map((text, index) => (
             <Link
+              key={index}
               to={
                 text === "Utilisateurs"
                   ? "/users"

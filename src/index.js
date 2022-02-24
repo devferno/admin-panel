@@ -9,6 +9,9 @@ const theme = createTheme({
   palette: {
     mode: "light",
   },
+  shape: {
+    borderRadius: 8,
+  },
 });
 ReactDOM.render(
   <Router>
